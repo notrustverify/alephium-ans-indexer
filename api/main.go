@@ -85,8 +85,8 @@ func main() {
 //	@Success	200	{array}	Name
 //	@Router		/address [get]
 //	@Param		strict	query	string	false	"Must fulfilled reverse and forward link"
-
-// @Param		strict	query	string	false	"Must fulfilled reverse and forward link"
+//
+// @Param		address	query	string	true	"Address to reverse the name"
 func getNameByAddressEndpoint(c *gin.Context) {
 	strictFlag, err := strconv.ParseBool(c.DefaultQuery("strict", "false"))
 	if err != nil {
@@ -109,7 +109,7 @@ func getNameByAddressEndpoint(c *gin.Context) {
 //	@Produce	json
 //	@Success	200	{}	Address
 //	@Router		/name [get]
-//	@Param		name	query	string	false	"Name to resolve"
+//	@Param		name	query	string	true	"Name to resolve"
 //	@Param		strict	query	string	false	"Must fulfilled reverse and forward link"
 func getAddressByNameEndpoint(c *gin.Context) {
 	strictFlag, err := strconv.ParseBool(c.DefaultQuery("strict", "false"))

@@ -15,6 +15,43 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/address": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "name"
+                ],
+                "summary": "Get names associated to an address",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Must fulfilled reverse and forward link",
+                        "name": "strict",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Address to reverse the name",
+                        "name": "address",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/main.Name"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/name": {
             "get": {
                 "produces": [
@@ -29,7 +66,8 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Name to resolve",
                         "name": "name",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     },
                     {
                         "type": "string",
