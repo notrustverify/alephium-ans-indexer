@@ -1,0 +1,40 @@
+basePath: /
+definitions:
+  main.Name:
+    properties:
+      capitalisation:
+        type: string
+      name:
+        type: string
+    type: object
+host: api.ans.notrustverify.ch
+info:
+  contact: {}
+  description: Find name or address associated to ANS
+  title: ANS Indexer API
+  version: "1.0"
+paths:
+  /name:
+    get:
+      parameters:
+      - description: Name to resolve
+        in: query
+        name: name
+        type: string
+      - description: Must fulfilled reverse and forward link
+        in: query
+        name: strict
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: ""
+      summary: Get address associated to a name
+      tags:
+      - name
+schemes:
+- https
+swagger: "2.0"

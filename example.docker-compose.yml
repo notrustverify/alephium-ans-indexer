@@ -1,0 +1,60 @@
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-ans}
+      PGDATA: /data/postgres
+    ports:
+      - '127.0.0.1:19974:5432'
+    restart: unless-stopped
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-q', '-d', 'postgres', '-U', 'postgres']
+      timeout: 45s
+      interval: 10s
+
+      # pgadmin:
+      #   image: dpage/pgadmin4
+      #   depends_on:
+      #     - db
+      #   environment:
+      #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      #     PGADMIN_CONFIG_SERVER_MODE: 'False'
+
+      #   ports:
+      #     - '${PGADMIN_PORT:-5050}:80'
+      #   restart: unless-stopped
+
+  api:
+    hostname: api
+    build: ./api
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    environment:
+      - DB_HOST=db:5432
+      - DB_USERNAME=${POSTGRES_USER:-postgres}
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - DB_NAME=${POSTGRES_DB:-ans}
+
+
+  events-listener:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./data:/data
+    command: yarn run eventsListener
+    environment:
+      - DEPLOYMENT=PRODUCTION
+      - NODE_URL=https://lb.notrustverify.ch
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=${POSTGRES_DB:-ans}
+      - DB_USERNAME=${POSTGRES_USER:-postgres}
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+    depends_on:
+      - db

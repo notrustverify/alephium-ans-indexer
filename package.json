@@ -1,0 +1,33 @@
+{
+  "name": "ans-indexer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "DEPLOYMENT=$DEPLOYMENT tsc --build .",
+    "eventsListener": "DEPLOYMENT=$DEPLOYMENT tsc --build . && node dist/src/eventsListener.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@alephium/cli": "^1.2.1",
+    "@alephium/web3": "^1.2.1",
+    "@alephium/web3-wallet": "^1.2.1",
+    "async-mutex": "^0.5.0",
+    "pg": "^8.12.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.3",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@alephium/web3-test": "^1.2.1",
+    "typescript": "^4.9.5"
+  },
+  "engines": {
+    "node": ">=14.0.0 <22.0.0",
+    "npm": ">=7.0.0"
+  }
+}

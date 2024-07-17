@@ -1,0 +1,5 @@
+.env
+api/.env
+postgres-data/
+docker-compose.yml
+node_modules/
