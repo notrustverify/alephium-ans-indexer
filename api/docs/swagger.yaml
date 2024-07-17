@@ -1,4 +1,12 @@
 basePath: /
+definitions:
+  main.Name:
+    properties:
+      capitalisation:
+        type: string
+      name:
+        type: string
+    type: object
 host: api.ans.notrustverify.ch
 info:
   contact: {}
@@ -6,6 +14,30 @@ info:
   title: ANS Indexer API
   version: "1.0"
 paths:
+  /address:
+    get:
+      parameters:
+      - description: Address to reverse the name
+        in: query
+        name: address
+        required: true
+        type: string
+      - description: Must fulfilled reverse and forward link
+        in: query
+        name: strict
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.Name'
+            type: array
+      summary: Get names associated to an address
+      tags:
+      - name
   /name:
     get:
       parameters:
