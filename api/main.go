@@ -84,9 +84,10 @@ func main() {
 //	@Produce	json
 //	@Success	200	{array}	Name
 //	@Router		/address [get]
+//
 // @Param		address	query	string	true	"Address to reverse the name"
+//
 //	@Param		strict	query	string	false	"Must fulfilled reverse and forward link"
-
 func getNameByAddressEndpoint(c *gin.Context) {
 	strictFlag, err := strconv.ParseBool(c.DefaultQuery("strict", "false"))
 	if err != nil {
