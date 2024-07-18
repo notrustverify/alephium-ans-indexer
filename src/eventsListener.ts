@@ -99,7 +99,7 @@ async function listenerManager(sequelize: Sequelize) {
 
 async function startDb() {
   const sequelize = await connection();
-  initDb(sequelize, process.env.FORCE_REINIT === 'true' ?? false);
+  initDb(sequelize, process.env.FORCE_REINIT === 'true');
 
   return sequelize
 }

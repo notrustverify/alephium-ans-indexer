@@ -118,7 +118,6 @@ func getAddressByNameEndpoint(c *gin.Context) {
 		strictFlag = false
 	}
 	name := strings.ToLower(c.Query("name"))
-	fmt.Println(name)
 
 	addr, err := getAddressByName(db, name, strictFlag)
 	if addr.Address != "" && err == nil {

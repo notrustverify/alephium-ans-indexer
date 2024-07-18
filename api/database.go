@@ -75,8 +75,10 @@ func getAddressByName(db *sql.DB, name string, strict bool) (Address, error) {
 	var err error
 	if strict {
 		rows, err = db.Query("SELECT addr.address FROM \"Names\" INNER JOIN \"Addresses\" addr ON \"Names\".\"linkedAddressId\" = addr.id INNER JOIN \"Addresses\" a ON \"Names\".\"reverseLinkedAddressId\" = a.id where \"Names\".\"linkedAddressId\" = \"Names\".\"reverseLinkedAddressId\" AND name = $1 AND expires >= NOW() AND \"isDeleted\" = false", name)
-	} else {
+	} else if getCount(name) > 0 {
 		rows, err = db.Query("SELECT addr.address FROM \"Names\" INNER JOIN \"Addresses\" addr ON \"Names\".\"linkedAddressId\" = addr.id AND name = $1 AND expires >= NOW() AND \"isDeleted\" = false", name)
+	} else {
+		rows, err = db.Query("SELECT addr.address FROM \"Names\" INNER JOIN \"Addresses\" addr ON \"Names\".\"reverseLinkedAddressId\" = addr.id AND name = $1 AND expires >= NOW() AND \"isDeleted\" = false", name)
 	}
 
 	if err != nil {
@@ -98,4 +100,18 @@ func getAddressByName(db *sql.DB, name string, strict bool) (Address, error) {
 	}
 
 	return addr, err
+}
+
+func getCount(name string) int {
+	var count int
+
+	err := db.QueryRow("SELECT COUNT(*) FROM \"Names\" where \"linkedAddressId\" is not null AND name = $1", name).Scan(&count)
+	switch {
+	case err != nil:
+		log.Fatal(err)
+		return 0
+	default:
+		return count
+	}
+
 }
